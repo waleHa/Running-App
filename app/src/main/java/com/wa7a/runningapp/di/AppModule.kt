@@ -1,8 +1,8 @@
 package com.wa7a.runningapp.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
-import com.wa7a.runningapp.db.Run
 import com.wa7a.runningapp.db.RunningDatabase
 import com.wa7a.runningapp.utils.Constants.RUNNING_DATABASE_NAME
 import dagger.Module
@@ -17,11 +17,24 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
-    fun provideRunningDatabase(@ApplicationContext app: Application) =
+    fun provideRunningDatabase(@ApplicationContext app: Context) =
         Room.databaseBuilder(app, RunningDatabase::class.java, RUNNING_DATABASE_NAME).build()
+    @Singleton
+    @Provides
+    fun provideRunDao(db: RunningDatabase) = db.getRunDao()
+}
+/*
+
+    fun provideRunningDatabase(
+        @ApplicationContext app: Context
+    ) = Room.databaseBuilder(
+        app,
+        RunningDatabase::class.java,
+        RUNNING_DATABASE_NAME
+    ).build()
 
     @Singleton
     @Provides
-    fun provideRunDao(db:RunningDatabase) = db.getRunDao()
-
+    fun provideRunDao(db: RunningDatabase) = db.getRunDao()
 }
+ */

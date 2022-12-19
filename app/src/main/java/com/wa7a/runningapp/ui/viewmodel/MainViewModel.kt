@@ -1,5 +1,6 @@
 package com.wa7a.runningapp.ui.viewmodel
 
+//import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.wa7a.runningapp.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
