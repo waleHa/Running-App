@@ -1,12 +1,16 @@
 package com.wa7a.runningapp.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.GoogleMap
 import com.wa7a.runningapp.R
+import com.wa7a.runningapp.service.TrackingService
 import com.wa7a.runningapp.ui.viewmodel.MainViewModel
+import com.wa7a.runningapp.utils.Constants
+import com.wa7a.runningapp.utils.Constants.ACTION_START_OR_RESUME_SERVICE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tracking.*
 
@@ -20,10 +24,20 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
 
+        btnToggleRun.setOnClickListener {
+        sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
+        }
+
         mapView?.getMapAsync {
             map = it
         }
     }
+
+    private fun sendCommandToService(action: String) =
+        Intent(requireContext(), TrackingService::class.java).also {
+            it.action = action
+            requireContext().startService(it)
+        }
 
     override fun onResume() {
         super.onResume()
@@ -49,6 +63,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         super.onLowMemory()
         mapView.onLowMemory()
     }
+
     //Cashing the map
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
