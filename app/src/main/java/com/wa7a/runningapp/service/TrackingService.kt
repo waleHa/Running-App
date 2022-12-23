@@ -51,6 +51,7 @@ typealias Polylines = MutableList<MutableList<LatLng>>
 class TrackingService : LifecycleService() {
 
     var isFirstRun = true
+    var serviceKilled = false
     //16
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -86,6 +87,15 @@ class TrackingService : LifecycleService() {
             updateNotificationTrackingState(it)
         })
     }
+    //17
+    private fun killService(){
+        serviceKilled = true
+        isFirstRun = true
+        pauseService()
+        postInitialValues()
+        stopForeground(true)
+        stopSelf()
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
@@ -108,6 +118,7 @@ class TrackingService : LifecycleService() {
                 }
                 ACTION_STOP_SERVICE -> {
                     Timber.d("Stopped service")
+                    killService()
                 }
             }
         }
@@ -239,10 +250,12 @@ class TrackingService : LifecycleService() {
         }
 
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
-        //16
+        //16,17
         timeRunInSeconds.observe(this, Observer {
-          val notification = curNotificationBuilder.setContentText(TrackingUtility.getFormattedStopWatchTime(it*1000L))
-            notificationManager.notify(NOTIFICATION_ID,notification.build())
+            if (!serviceKilled){
+                val notification = curNotificationBuilder.setContentText(TrackingUtility.getFormattedStopWatchTime(it*1000L))
+                notificationManager.notify(NOTIFICATION_ID,notification.build())
+            }
         })
     }
 
