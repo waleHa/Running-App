@@ -51,10 +51,12 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
             val calender = Calendar.getInstance().apply {
                 timeInMillis = run.timeStamp
             }
-            val dateFormat =  SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
             tvDate.text = dateFormat.format(calender.time)
 
             val avgSpeed = "${run.avgSpeedInKMH}km/h"
+            tvAvgSpeed.text = avgSpeed
+
             val distanceInKm = "${run.distanceInMeters / 1000f}km"
             tvDistance.text = distanceInKm
 
