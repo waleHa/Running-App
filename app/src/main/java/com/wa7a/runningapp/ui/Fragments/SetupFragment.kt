@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SetupFragment : Fragment(R.layout.fragment_setup) {
-//    private val viewModel: MainViewModel by viewModels()
 
     @Inject
     lateinit var sharedPref: SharedPreferences
@@ -29,24 +28,23 @@ class SetupFragment : Fragment(R.layout.fragment_setup) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!isFirstAppOpen) {
-            //remove setup fragment from nav stack
+        if(!isFirstAppOpen) {
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(R.id.setupFragment, true)
                 .build()
             findNavController().navigate(
                 R.id.action_setupFragment_to_runFragment,
-                savedInstanceState, navOptions
+                savedInstanceState,
+                navOptions
             )
         }
 
         tvContinue.setOnClickListener {
             val success = writePersonalDataToSharedPref()
-            if (success) {
+            if(success) {
                 findNavController().navigate(R.id.action_setupFragment_to_runFragment)
             } else {
-                Snackbar.make(requireView(), "Please, enter all fields!", Snackbar.LENGTH_SHORT)
-                    .show()
+                Snackbar.make(requireView(), "Please enter all the fields", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -54,10 +52,11 @@ class SetupFragment : Fragment(R.layout.fragment_setup) {
     private fun writePersonalDataToSharedPref(): Boolean {
         val name = etName.text.toString()
         val weight = etWeight.text.toString()
-        if (name.isEmpty() || weight.isEmpty()) {
+        if(name.isEmpty() || weight.isEmpty()) {
             return false
         }
-        sharedPref.edit().putString(KEY_NAME, name)
+        sharedPref.edit()
+            .putString(KEY_NAME, name)
             .putFloat(KEY_WEIGHT, weight.toFloat())
             .putBoolean(KEY_FIRST_TIME_TOGGLE, false)
             .apply()
@@ -65,4 +64,5 @@ class SetupFragment : Fragment(R.layout.fragment_setup) {
         requireActivity().tvToolbarTitle.text = toolbarText
         return true
     }
+
 }

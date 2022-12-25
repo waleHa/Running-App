@@ -20,10 +20,11 @@ import dagger.hilt.android.scopes.ServiceScoped
 @InstallIn(ServiceComponent::class)
 object ServiceModule {
 
-    @ServiceScoped//Singlton
+    @ServiceScoped
     @Provides
-    fun provideFusedLocationProviderClient(@ApplicationContext app: Context) =
-        getFusedLocationProviderClient(app)
+    fun provideFusedLocationProviderClient(
+        @ApplicationContext app: Context
+    ) = getFusedLocationProviderClient(app)
 
     @ServiceScoped
     @Provides
@@ -50,6 +51,4 @@ object ServiceModule {
         .setContentTitle("Running App")
         .setContentText("00:00:00")
         .setContentIntent(pendingIntent)
-
-
 }
