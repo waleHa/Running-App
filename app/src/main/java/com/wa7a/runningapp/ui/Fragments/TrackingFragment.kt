@@ -28,6 +28,7 @@ import com.wa7a.runningapp.utils.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tracking.*
 import java.util.Calendar
+import javax.inject.Inject
 import kotlin.math.round
 
 @AndroidEntryPoint
@@ -41,6 +42,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     private var curTimeInMillis = 0L
 
+    @set:Inject
     private var weight = 80f
 
     //17
